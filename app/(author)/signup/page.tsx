@@ -3,13 +3,21 @@
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { Eye, EyeOff, LoaderCircle } from "lucide-react"
+import { Eye, EyeOff, LoaderCircle, ShieldCheck, Briefcase, UserSearch } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
 
 type AuthError = { message?: string } | null
+
+const ROLES = [
+  { value: "seeker", label: "Job Seeker", icon: UserSearch },
+  { value: "recruiter", label: "Recruiter", icon: Briefcase },
+  { value: "admin", label: "Admin", icon: ShieldCheck },
+] as const
+
+type Role = (typeof ROLES)[number]["value"]
 
 function GoogleIcon() {
   return (
@@ -39,6 +47,7 @@ export default function SignUpPage() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [role, setRole] = useState<Role>("seeker")
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<AuthError>(null)
@@ -51,6 +60,7 @@ export default function SignUpPage() {
       name,
       email,
       password,
+      role,
       callbackURL: "/",
     })
     setLoading(false)
@@ -169,6 +179,32 @@ export default function SignUpPage() {
               >
                 {showPassword ? <EyeOff className="size-5" /> : <Eye className="size-5" />}
               </button>
+            </div>
+          </div>
+
+          <div>
+            <span className={inputLabel}>I am a</span>
+            <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Account type">
+              {ROLES.map(({ value, label, icon: Icon }) => {
+                const selected = role === value
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    onClick={() => setRole(value)}
+                    className={`flex h-11 flex-col items-center justify-center gap-1 rounded-xl border px-2 text-sm font-medium transition-all sm:flex-row sm:gap-2 ${
+                      selected
+                        ? "border-[#5c53fe] bg-[#5c53fe] text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)]"
+                        : "border-white/20 bg-[#1a1a1f] text-white hover:bg-[#222228]"
+                    }`}
+                  >
+                    <Icon className="size-4" aria-hidden="true" />
+                    {label}
+                  </button>
+                )
+              })}
             </div>
           </div>
 
