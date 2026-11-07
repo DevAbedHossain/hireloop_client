@@ -6,7 +6,6 @@ import { useState } from "react"
 import { Menu as MenuIcon, X as XIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { cn } from "cn"
 
 const navLinks = [
   { label: "Browse Jobs", href: "/jobs" },
@@ -63,12 +62,14 @@ export function Navbar() {
                 </Link>
               ))}
               <div aria-hidden="true" className="mx-2.5 my-1.5 h-px bg-[#a8a8a8]/40" />
-              <Button
-                variant="ghost"
-                className="h-9 justify-start rounded-md text-sm font-semibold text-[#645bff] hover:bg-white/5 hover:text-[#645bff]"
-              >
-                Sign In
-              </Button>
+              <Link href="/signin">
+                <Button
+                  variant="ghost"
+                  className="h-9 justify-start rounded-md text-sm font-semibold text-[#645bff] hover:bg-white/5 hover:text-[#645bff]"
+                >
+                  Sign In
+                </Button>
+              </Link>
               <Button
                 variant="ghost"
                 className="mt-1 h-9 rounded-md bg-[#5c53fe] text-sm text-[#ededeb] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4b43e0] hover:text-white"
@@ -102,12 +103,14 @@ function DesktopNav() {
       <span aria-hidden="true" className="mx-6 h-6 w-px bg-[#a8a8a8]/40" />
 
       <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          className="h-10 rounded-lg px-4 text-lg font-semibold text-[#645bff] hover:bg-white/5 hover:text-[#645bff] focus-visible:text-[#645bff]"
-        >
-          Sign In
-        </Button>
+        <Link href="/signin">
+          <Button
+            variant="ghost"
+            className="h-10 rounded-lg px-4 text-lg font-semibold text-[#645bff] hover:bg-white/5 hover:text-[#645bff] focus-visible:text-[#645bff]"
+          >
+            Sign In
+          </Button>
+        </Link>
         <Button
           variant="ghost"
           className="h-10 rounded-lg border border-[#090a15]/10 bg-[#5c53fe] px-5 text-lg text-[#ededeb] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4b43e0] hover:text-white"
