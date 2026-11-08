@@ -5,7 +5,7 @@ const DashoardPage = ({ children }: { children: React.ReactNode }) => {
     return (
         <SidebarProvider>
             <DashboardSidebar />
-            <main>
+            <main className="min-h-svh w-full bg-[#0e0e11]">
                 <SidebarTrigger />
                 {children}
             </main>
