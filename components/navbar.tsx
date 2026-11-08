@@ -8,15 +8,16 @@ import { Menu as MenuIcon, X as XIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { signOut, useSession } from "@/lib/auth-client";
 
-const navLinks = [
-  { label: "Browse Jobs", href: "/jobs" },
-  { label: "Company", href: "/company" },
-  { label: "Pricing", href: "/pricing" },
-]
-
 export function Navbar() {
   const { data: session } = useSession();
   const user = session?.user;
+
+  const navLinks = [
+    { label: "Browse Jobs", href: "/jobs" },
+    { label: "Company", href: "/company" },
+    { label: "Pricing", href: "/pricing" },
+    { label: "Dashboard", href: `/dashboard/${user?.role || "seeker"}` },
+  ]
 
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -35,7 +36,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop: inline links + divider + actions */}
-        <DesktopNav />
+        <DesktopNav navLinks={navLinks} />
 
         {/* Mobile / tablet: hamburger + dropdown (Figma "HL/Menu") */}
         <div className="md:hidden">
@@ -104,7 +105,7 @@ export function Navbar() {
   )
 }
 
-function DesktopNav() {
+function DesktopNav({ navLinks }: { navLinks: { label: string; href: string }[] }) {
 
   const { data: session } = useSession();
   const user = session?.user;

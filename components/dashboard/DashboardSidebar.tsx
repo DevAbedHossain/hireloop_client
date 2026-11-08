@@ -11,6 +11,7 @@ import {
     CreditCard,
     FileText,
     LayoutDashboard,
+    PlusCircle,
     Settings,
     Users,
 } from "lucide-react"
@@ -26,6 +27,7 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { useSession } from "@/lib/auth-client"
+import Link from "next/link";
 
 export type MenuItem = {
     id: string
@@ -49,6 +51,7 @@ const menuItemsByRole: Record<Role, MenuItem[]> = {
         { id: "dashboard", name: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
         { id: "my-company", name: "My Company", url: "/dashboard/my-company", icon: Building2 },
         { id: "manage-jobs", name: "Manage Jobs", url: "/dashboard/manage-jobs", icon: Briefcase },
+        { id: "add-jobs", name: "Add Jobs", url: "/dashboard/recruiter/jobs/new", icon: PlusCircle },
         { id: "applications", name: "Applications", url: "/dashboard/applications", icon: FileText },
         { id: "settings", name: "Settings", url: "/dashboard/settings", icon: Settings },
     ],
@@ -77,7 +80,7 @@ export function DashboardSidebar() {
                         <SidebarMenuItem key={item.id}>
                             <SidebarMenuButton
                                 isActive={pathname === item.url}
-                                render={<a href={item.url} />}
+                                render={<Link href={item.url} />}
                                 className="data-active:before:absolute data-active:before:left-0 data-active:before:top-1/2 data-active:before:h-4 data-active:before:w-0.5 data-active:before:-translate-y-1/2 data-active:before:rounded-full data-active:before:bg-[#5c53fe]"
                             >
                                 <item.icon />
