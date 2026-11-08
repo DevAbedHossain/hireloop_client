@@ -6,8 +6,8 @@ import { Banknote, Building2, Calendar, ChevronDown, MapPin } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "cn";
 import { createPost } from "@/lib/actions/createPost";
+import { cn } from "cn";
 
 // Field values live in one flat object — read/write with `form.<field>` and `set("field", value)`.
 export const initialForm = {
