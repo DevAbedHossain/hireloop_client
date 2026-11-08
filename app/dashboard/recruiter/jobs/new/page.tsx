@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "cn";
+import { createPost } from "@/lib/actions/createPost";
 
 // Field values live in one flat object — read/write with `form.<field>` and `set("field", value)`.
-const initialForm = {
+export const initialForm = {
     title: "",
     companyName: "",
     category: "",
@@ -52,10 +53,14 @@ function AddNewJobs() {
         setSubmitted(false);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log("new job post", form);
         setSubmitted(true);
+
+        const result = await createPost(form);
+
+        console.log("submit data", result)
     };
 
     return (
