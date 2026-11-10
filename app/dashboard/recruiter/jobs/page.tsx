@@ -1,15 +1,17 @@
 import Link from "next/link";
-import { ChevronRight, Eye, MapPin, MoreHorizontal, PencilLine } from "lucide-react";
+import { ChevronRight, EllipsisVertical, Eye, MapPin, PencilLine, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "cn";
 import { getJobs } from "@/lib/api/jobs";
+import { JobDeleteDialog } from "@/components/dashboard/JobDeleteDialog";
+import { JobStatus } from "./new/page";
 
 // One posting = the same shape the "new job" form collects (initialForm)
 // plus table-only fields (status, applicants, postedAt).
-type JobStatus = "Active" | "Expired";
 
-type JobPost = {
+
+export type JobPost = {
     // Mongo documents come back with `_id`
     _id?: string;
     title: string;
@@ -200,28 +202,28 @@ const ManageJobs = async () => {
                                         <td className="px-4 py-4">
                                             <div className="flex items-center justify-end gap-1.5">
                                                 <Button
-                                                    variant="ghost"
-                                                    className="size-8 rounded-lg p-0 text-[#a1a4aa] hover:bg-[#1f1f1f] hover:text-white"
-                                                    aria-label="View job post"
-                                                >
-                                                    <Eye />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    className="size-8 rounded-lg bg-[#1f1f1f] p-0 text-[#a0a0ab] hover:bg-[#232327] hover:text-white"
-                                                    aria-label="More actions"
-                                                >
-                                                    <MoreHorizontal />
-                                                </Button>
-                                                <Button
-                                                    className="h-8 rounded-lg border border-transparent bg-[#5c53fe]/20 px-3 text-sm font-medium text-[#c3c0ff] hover:bg-[#5c53fe]/30"
+                                                    className="h-8 rounded-lg border border-transparent bg-[#5c53fe]/20 px-3 text-sm font-medium text-[#c3c0ff] hover:bg-[#5c53fe]/30 "
                                                     render={
                                                         <Link href="/dashboard/recruiter/jobs/new" />
                                                     }
                                                     nativeButton={false}
                                                 >
-                                                    Update
+                                                    <PencilLine />
                                                 </Button>
+
+                                                <Button
+                                                    variant="ghost"
+                                                    className="size-8 rounded-lg p-0 text-[#a0a0ab] hover:bg-[#1f1f1f] hover:text-white"
+                                                    render={
+                                                        <Link href={`/job/${job._id}`} />
+                                                    }
+                                                    nativeButton={false}
+                                                >
+                                                    <Eye />
+                                                </Button>
+
+                                                <JobDeleteDialog job={job} />
+
                                             </div>
                                         </td>
                                     </tr>

@@ -9,8 +9,29 @@ import { Textarea } from "@/components/ui/textarea";
 import { createPost } from "@/lib/actions/createPost";
 import { cn } from "cn";
 
+
+export type JobStatus = "Active" | "Expired";
+
+type JobForm = {
+    title: string;
+    companyName: string;
+    category: string;
+    jobType: string;
+    location: string;
+    isRemote: boolean;
+    deadline: string;
+    minSalary: string;
+    maxSalary: string;
+    frequency: string;
+    responsibilities: string;
+    qualifications: string;
+    status?: JobStatus;
+    applicants?: number;
+    postedAt?: string;
+};
+
 // Field values live in one flat object — read/write with `form.<field>` and `set("field", value)`.
-export const initialForm = {
+export const initialForm: JobForm = {
     title: "",
     companyName: "",
     category: "",
