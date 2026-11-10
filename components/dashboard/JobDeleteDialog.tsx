@@ -15,7 +15,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { JobPost } from "@/app/dashboard/recruiter/jobs/page";
+import { JobPost } from "@/types";
 import { jobDelete } from "@/lib/actions/createPost";
 import { toast } from "../ui/toast";
 import { useState } from "react";

@@ -88,8 +88,8 @@ export function Navbar() {
                     </Link>
                     <Link href="signup">
                       <Button
-                        variant="ghost"
-                        className="mt-1 h-9 rounded-md bg-[#5c53fe] text-sm text-[#ededeb] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4b43e0] hover:text-white"
+                        variant="brand"
+                        className="mt-1 h-9 rounded-md text-sm"
                       >
                         Get Started
                       </Button>
@@ -148,8 +148,8 @@ function DesktopNav({ navLinks }: { navLinks: { label: string; href: string }[] 
             </Link>
             <Link href="/signup">
               <Button
-                variant="ghost"
-                className="h-10 rounded-lg border border-[#090a15]/10 bg-[#5c53fe] px-5 text-lg text-[#ededeb] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4b43e0] hover:text-white"
+                variant="brand"
+                className="h-10 rounded-lg border border-[#090a15]/10 px-5 text-lg"
               >
                 Get Started
               </Button>

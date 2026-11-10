@@ -63,7 +63,8 @@ export function Hero() {
           <Button
             type="submit"
             aria-label="Search"
-            className="h-12 w-full shrink-0 rounded-xl bg-[#5c53fe] text-white shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4b43e0] sm:m-2 sm:size-12 sm:w-12 sm:p-0"
+            variant="brand"
+            className="h-12 w-full shrink-0 rounded-xl sm:m-2 sm:size-12 sm:w-12 sm:p-0"
           >
             <Search className="size-5" />
           </Button>

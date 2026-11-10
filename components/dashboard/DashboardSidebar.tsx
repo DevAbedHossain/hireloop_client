@@ -1,5 +1,3 @@
-"use client";
-
 "use client"
 
 import type { LucideIcon } from "lucide-react"
@@ -27,6 +25,7 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { useSession } from "@/lib/auth-client"
+import { Role } from "@/types"
 import Link from "next/link";
 
 export type MenuItem = {
@@ -35,8 +34,6 @@ export type MenuItem = {
     url: string
     icon: LucideIcon
 }
-
-export type Role = "seeker" | "recruiter" | "admin"
 
 const menuItemsByRole: Record<Role, MenuItem[]> = {
     seeker: [
