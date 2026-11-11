@@ -2,7 +2,6 @@ import {
     BadgeCheck,
     Banknote,
     BarChart3,
-    Bookmark,
     Building2,
     CircleDollarSign,
     Clock3,
@@ -16,6 +15,7 @@ import { notFound } from 'next/navigation';
 import { jobDetails } from '@/lib/api/jobs';
 import { formatCompensation, formatDeadline } from '@/lib/utils/job-format';
 import { JobPost } from '@/types';
+import JobDetailsAction from '@/components/job-details-page/JobDetailsAction';
 
 // Shared class strings (same pattern as the browse-jobs cards).
 const card = 'rounded-2xl border border-white/8 bg-[#101013]';
@@ -83,22 +83,7 @@ const JobDetailsPage = async ({ params }: { params: Promise<{ id: string }> }) =
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
-                            <button
-                                type="button"
-                                aria-label={`Save ${job.title}`}
-                                className="flex size-10 cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-[#1a1a1f] text-[#a1a4aa] transition-colors hover:text-white"
-                            >
-                                <Bookmark className="size-5" aria-hidden="true" />
-                            </button>
-                            {/* Apply Now is display-only for now — no functionality yet. */}
-                            <button
-                                type="button"
-                                className="h-10 cursor-pointer rounded-lg bg-white px-5 text-sm font-semibold text-[#0a0a0c] transition-colors hover:bg-white/90"
-                            >
-                                Apply Now
-                            </button>
-                        </div>
+                        <JobDetailsAction job={job} />
                     </section>
 
                     {/* Quick facts row */}

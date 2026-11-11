@@ -19,3 +19,8 @@ export const jobDelete = async (id: string) => {
 
     return res.json();
 }
+
+export const appliedJobs = async () => {
+    const res = await fetch(`${BASE_URL}/applications`);
+    return res.json();
+}

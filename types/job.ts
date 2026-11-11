@@ -51,3 +51,11 @@ export type JobFilters = {
     /** Minimum salary/rate as a plain number string ("" = any). */
     minSalary: string;
 };
+
+export type AppliedJob = {
+    userId: string;
+    jobId: string | undefined;
+    userEmail: string;
+    jobTitle: string;
+    jobCompany: string;
+}

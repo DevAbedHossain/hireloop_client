@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { LoaderCircle } from "lucide-react"
 
@@ -23,6 +23,11 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<AuthError>(null)
 
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") ?? "/";
+
+  console.log("redirectTo", redirectTo)
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
@@ -31,14 +36,14 @@ export default function SignInPage() {
       email,
       password,
       rememberMe,
-      callbackURL: "/",
+      callbackURL: redirectTo,
     })
     setLoading(false)
     if (error) {
       setError(error)
       return
     }
-    router.push("/")
+    router.push(redirectTo)
     router.refresh()
   }
 
@@ -47,7 +52,7 @@ export default function SignInPage() {
     setLoading(true)
     const { error } = await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/",
+      callbackURL: redirectTo,
     })
     if (error) {
       setLoading(false)

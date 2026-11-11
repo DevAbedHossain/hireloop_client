@@ -1,4 +1,4 @@
-import type { JobForm } from "@/types";
+import type { AppliedJob, JobForm } from "@/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -11,6 +11,17 @@ export const createPost = async (data: JobForm) => {
         body: JSON.stringify(data),
     })
 
+    return res.json();
+}
+
+export const applicationJob = async (job: AppliedJob) => {
+    const res = await fetch(`${BASE_URL}/application`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(job),
+    })
     return res.json();
 }
 
