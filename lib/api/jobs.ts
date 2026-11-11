@@ -2,7 +2,20 @@ import type { JobPost } from "@/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
-export const getJobs = async (): Promise<JobPost[]> => {
-    const res = await fetch(`${BASE_URL}/jobs`);
+export const getJobs = async (query = ""): Promise<JobPost[]> => {
+    const res = await fetch(`${BASE_URL}/jobs?${query}`);
+    return res.json();
+}
+
+export const jobDetails = async (id: string) => {
+    const res = await fetch(`${BASE_URL}/job/${id}`);
+    return res.json();
+}
+
+export const jobDelete = async (id: string) => {
+    const res = await fetch(`${BASE_URL}/job/${id}`, {
+        method: "DELETE",
+    })
+
     return res.json();
 }

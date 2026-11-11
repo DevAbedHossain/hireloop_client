@@ -14,10 +14,3 @@ export const createPost = async (data: JobForm) => {
     return res.json();
 }
 
-export const jobDelete = async (id: string) => {
-    const res = await fetch(`${BASE_URL}/job/${id}`, {
-        method: "DELETE",
-    })
-
-    return res.json();
-}

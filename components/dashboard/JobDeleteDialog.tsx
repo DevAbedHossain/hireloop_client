@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { JobPost } from "@/types";
-import { jobDelete } from "@/lib/actions/createPost";
+import { jobDelete } from "@/lib/api/jobs";
 import { toast } from "../ui/toast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";

@@ -7,21 +7,11 @@ import { getJobs } from "@/lib/api/jobs";
 import { JobDeleteDialog } from "@/components/dashboard/JobDeleteDialog";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
+import { formatCompensation, formatDeadline } from "@/lib/utils/job-format";
 import type { JobPost, JobStatus } from "@/types";
 
 // Back-compat re-export — the canonical definitions live in @/types.
 export type { JobPost, JobStatus } from "@/types";
-
-// "per hour" -> "/ hr", "per year" -> "/ yr", "per month" -> "/ mo"
-const frequencySuffix = (frequency: string) => {
-    const suffixes: Record<string, string> = {
-        "per hour": "/ hr",
-        "per day": "/ day",
-        "per month": "/ mo",
-        "per year": "/ yr",
-    };
-    return suffixes[frequency] ?? `/${frequency.split(" ")[1] ?? ""}`;
-};
 
 const cellSmall = "text-sm text-[#a0a0ab]";
 const hideSm = "sm:hidden";
@@ -133,8 +123,7 @@ const ManageJobs = async () => {
 
                                         {/* Compensation */}
                                         <td className={cn("px-4 py-4 text-sm text-white", hideMd)}>
-                                            €{job.minSalary} – €{job.maxSalary}{" "}
-                                            {frequencySuffix(job.frequency)}
+                                            {formatCompensation(job)}
                                         </td>
 
                                         {/* Applicants */}
@@ -155,11 +144,7 @@ const ManageJobs = async () => {
                                             <div className="flex flex-col gap-1">
                                                 {job.postedAt && <span className={cellSmall}>{job.postedAt}</span>}
                                                 <span className={cellSmall}>
-                                                    {new Date(job.deadline).toLocaleDateString("en-US", {
-                                                        month: "short",
-                                                        day: "2-digit",
-                                                        year: "numeric",
-                                                    })}
+                                                    {formatDeadline(job.deadline)}
                                                 </span>
                                             </div>
                                         </td>
