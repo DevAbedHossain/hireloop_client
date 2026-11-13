@@ -7,6 +7,7 @@ import { JobPost } from '@/types';
 import { Bookmark } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from '../ui/toast';
+import { appliedJobsCount } from '@/lib/api/jobs';
 
 
 const JobDetailsAction = ({ job }: { job: JobPost }) => {
@@ -17,26 +18,35 @@ const JobDetailsAction = ({ job }: { job: JobPost }) => {
     const router = useRouter();
 
     const handleApplyJob = async () => {
-        console.log("job id", job._id);
+
         if (!user) {
             router.push(`/signin?redirectTo=/browse-jobs/${job._id}`);
             return;
         } else if (user.role === "seeker") {
-            const application = {
-                userId: user.id,
-                jobId: job._id,
-                userEmail: user.email,
-                jobTitle: job.title,
-                jobCompany: job.companyName,
-            }
 
-            const result = await applicationJob(application);
-            if (result.insertedId) {
-                toast.add({
-                    title: "success",
-                    description: "Successfully applied this job!"
-                })
-                router.push("/browse-jobs");
+            const resultCount = await appliedJobsCount(user.id);
+
+            if (resultCount.count > 10) {
+
+                router.push("/checkout");
+                return;
+            } else {
+                const application = {
+                    userId: user.id,
+                    jobId: job._id,
+                    userEmail: user.email,
+                    jobTitle: job.title,
+                    jobCompany: job.companyName,
+                }
+
+                const result = await applicationJob(application);
+                if (result.insertedId) {
+                    toast.add({
+                        title: "success",
+                        description: "Successfully applied this job!"
+                    })
+                    router.push("/browse-jobs");
+                }
             }
 
         } else {

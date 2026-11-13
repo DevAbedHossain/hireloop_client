@@ -37,6 +37,21 @@ export type JobPost = Omit<JobForm, "responsibilities" | "qualifications"> & {
     postedAt?: string;
 };
 
+/** Application lifecycle states shown on the seeker applications page. */
+export type ApplicationStatus = "Applied" | "Review" | "Shortlisted" | "Rejected" | "Offered";
+
+/** One seeker application as returned by the API (`GET /applications`). */
+export type Application = {
+    _id: string;
+    jobId: string;
+    jobTitle: string;
+    jobCompany: string;
+    userId?: string;
+    userEmail?: string;
+    /** Not tracked by the API yet — the UI defaults to "Applied". */
+    status?: ApplicationStatus;
+};
+
 /** Filter state for the browse jobs page (search + commonly filtered JobPost fields). */
 export type JobFilters = {
     /** Free-text search across title, company, category and location. */

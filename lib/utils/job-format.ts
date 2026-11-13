@@ -26,3 +26,25 @@ export const formatDeadline = (deadline: string) =>
         day: "2-digit",
         year: "numeric",
     });
+
+/** Mongo ObjectId -> creation date (the first 8 hex chars hold the unix seconds). */
+export const objectIdToDate = (id: string) =>
+    new Date(parseInt(id.slice(0, 8), 16) * 1000);
+
+/** Date -> "2 hours ago" / "1 week ago" style relative label. */
+export const formatRelativeTime = (date: Date) => {
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    const units: Array<[Intl.RelativeTimeFormatUnit, number]> = [
+        ["week", 60 * 60 * 24 * 7],
+        ["day", 60 * 60 * 24],
+        ["hour", 60 * 60],
+        ["minute", 60],
+    ];
+    for (const [unit, secondsInUnit] of units) {
+        if (seconds >= secondsInUnit) {
+            return new Intl.RelativeTimeFormat("en", { numeric: "always", style: "long" })
+                .format(-Math.floor(seconds / secondsInUnit), unit);
+        }
+    }
+    return "just now";
+};
