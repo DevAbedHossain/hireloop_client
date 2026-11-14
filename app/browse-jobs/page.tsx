@@ -1,8 +1,5 @@
-import { Banknote, Bookmark, ChevronDown, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getJobs } from '@/lib/api/jobs';
-import { formatCompensation } from '@/lib/utils/job-format';
 import { JobPost } from '@/types';
 import SearchFilter from '@/components/borwse-jobs/search-filter';
 import { JobFiltersPanel } from '@/components/borwse-jobs/sidbar-filter';

@@ -65,7 +65,7 @@ const ApplicationsPage = async () => {
         headers: await headers()
     })
 
-    const [applications, jobs] = await Promise.all([appliedJobs(`userId=${session?.user.id}`), getJobs()]);
+    const [applications, jobs] = await Promise.all([appliedJobs(session?.user.id ?? ""), getJobs()]);
 
     // The applications API only stores title/company — enrich with the posting
     // data (job type, remote flag) for the "Full-time • Remote" subtitle.

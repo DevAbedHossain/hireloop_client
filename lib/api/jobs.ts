@@ -1,4 +1,4 @@
-import type { Application, JobPost } from "@/types";
+import type { JobPost } from "@/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
@@ -21,11 +21,12 @@ export const jobDelete = async (id: string) => {
 }
 
 export const appliedJobs = async (userId: string) => {
-    const res = await fetch(`${BASE_URL}/applications?${userId}`);
+    const res = await fetch(`${BASE_URL}/applications?userId=${userId}`);
     return res.json();
 }
 
-export const appliedJobsCount = async (userId: string) => {
-    const res = await fetch(`${BASE_URL}/applications/count?${userId}`);
+export const appliedJobsCount = async (userId = "") => {
+    const res = await fetch(`${BASE_URL}/applications/count?userId=${userId}`);
     return res.json();
 }
+

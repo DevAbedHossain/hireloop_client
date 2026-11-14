@@ -38,7 +38,6 @@ export default async function Success({
         })
 
         const result = await checkoutVerify(session_id);
-        console.log("result", result)
 
         return (
             <section id="success">

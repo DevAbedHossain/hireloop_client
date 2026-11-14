@@ -8,6 +8,7 @@ import { Bookmark } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from '../ui/toast';
 import { appliedJobsCount } from '@/lib/api/jobs';
+import { getUserPremiumId } from '@/lib/api/users';
 
 
 const JobDetailsAction = ({ job }: { job: JobPost }) => {
@@ -24,9 +25,13 @@ const JobDetailsAction = ({ job }: { job: JobPost }) => {
             return;
         } else if (user.role === "seeker") {
 
-            const resultCount = await appliedJobsCount(user.id);
+            const premiumResult = await getUserPremiumId(user.id);
+            console.log(premiumResult, "pre res")
 
-            if (resultCount.count > 10) {
+            const resultCount = await appliedJobsCount(user.id);
+            console.log(resultCount, "job colunt")
+
+            if (!premiumResult.premium && resultCount.count >= 2) {
 
                 router.push("/checkout");
                 return;
