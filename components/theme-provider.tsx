@@ -12,6 +12,11 @@ function ThemeProvider({
       attribute="class"
       defaultTheme="dark"
       disableTransitionOnChange
+      // React 19 warns about next-themes' inline <script> rendered inside a
+      // component (https://github.com/pacocoursey/next-themes/issues/387).
+      // type="application/json" makes it a non-executable data block so React
+      // no longer warns; the theme is still applied right after hydration.
+      scriptProps={{ type: "application/json" }}
       {...props}
     >
       <ThemeHotkey />

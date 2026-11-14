@@ -2,8 +2,12 @@ import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 
 import { stripe } from '../../../lib/stripe'
+import { getServer } from '@/lib/core/Server';
 
 export async function POST() {
+
+    const user = await getServer();
+
     try {
         const headersList = await headers()
         const origin = headersList.get('origin')
@@ -13,20 +17,25 @@ export async function POST() {
             line_items: [
                 {
                     // Provide the exact Price ID (for example, price_1234) of the product you want to sell
-                    price: '{{PRICE_ID}}',
+                    price: 'price_1UbAzNHJgiST2BvT7nBhvZQw',
                     quantity: 1,
                 },
             ],
             mode: 'payment',
-            success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+            customer_email: user?.email,
+            metadata: {
+                userId: user?.id as string,
+            },
+            success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
             // Provide a name (for example, hosted_web_0001) to label this Checkout integration and measure its conversion independently
-            integration_identifier: '{{INTEGRATION_ID}}',
+            integration_identifier: 'hire_loop_pay_001',
         });
-        return NextResponse.redirect(session.url, 303)
+        return NextResponse.redirect(session.url as string, 303)
     } catch (err) {
+        const error = err instanceof Error ? err : new Error(String(err))
         return NextResponse.json(
-            { error: err.message },
-            { status: err.statusCode || 500 }
+            { error: error.message },
+            { status: 500 }
         )
     }
 }

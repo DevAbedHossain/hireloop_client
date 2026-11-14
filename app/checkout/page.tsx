@@ -1,73 +1,27 @@
-"use client";
+
 
 import Link from "next/link";
-import { useState } from "react";
 import {
     ArrowLeft,
     CreditCard,
     Infinity as InfinityIcon,
-    LoaderCircle,
-    LockKeyhole,
     ShieldCheck,
-    Sparkles,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { FormField } from "@/components/shared/FormField";
-import { toast } from "@/components/ui/toast";
+
 
 const PRICE = 29.0;
 
-const formatCardNumber = (value: string) =>
-    value
-        .replace(/\D/g, "")
-        .slice(0, 16)
-        .replace(/(\d{4})(?=\d)/g, "$1 ");
 
-const formatExpiry = (value: string) =>
-    value
-        .replace(/\D/g, "")
-        .slice(0, 4)
-        .replace(/^(\d{2})(?=\d)/, "$1/");
+export default async function CheckoutPage({ searchParams }: { searchParams: { canceled?: string } }) {
 
-export default function CheckoutPage() {
-    const [cardName, setCardName] = useState("");
-    const [cardNumber, setCardNumber] = useState("");
-    const [expiry, setExpiry] = useState("");
-    const [cvc, setCvc] = useState("");
-    const [loading, setLoading] = useState(false);
+    const { canceled } = await searchParams;
 
-    async function onSubmit(e: React.FormEvent) {
-        e.preventDefault();
-
-        const digits = cardNumber.replace(/\D/g, "");
-        if (digits.length < 13) {
-            toast.add({ type: "error", title: "Invalid card", description: "Please enter a valid card number." });
-            return;
-        }
-        if (!/^\d{2}\/\d{2}$/.test(expiry)) {
-            toast.add({ type: "error", title: "Invalid expiry", description: "Expiry must be in MM/YY format." });
-            return;
-        }
-        if (cvc.replace(/\D/g, "").length < 3) {
-            toast.add({ type: "error", title: "Invalid CVC", description: "Please enter a valid CVC." });
-            return;
-        }
-
-        setLoading(true);
-
-        // TODO: Replace with a Stripe Checkout flow — call the backend to
-        // create a Checkout Session, then redirect the user to
-        // `session.url` (the hosted Stripe payment page).
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        setLoading(false);
-        toast.add({
-            type: "info",
-            title: "Stripe Checkout coming soon",
-            description: "This button will redirect you to Stripe to complete the payment.",
-        });
+    if (canceled) {
+        console.log(
+            'Order canceled -- continue to shop around and check out when you\'re ready.'
+        )
     }
 
     return (
@@ -134,82 +88,18 @@ export default function CheckoutPage() {
                         <h2 className="text-lg font-semibold text-white">Payment information</h2>
                     </div>
 
-                    <form onSubmit={onSubmit} className="flex flex-col gap-5">
-                        <FormField id="cardName" label="Name on card" required>
-                            <Input
-                                id="cardName"
-                                type="text"
-                                value={cardName}
-                                onChange={(e) => setCardName(e.target.value)}
-                                placeholder="John Carter"
-                                autoComplete="cc-name"
-                                required
-                                className="text-white"
-                            />
-                        </FormField>
-
-                        <FormField id="cardNumber" label="Card number" required>
-                            <Input
-                                id="cardNumber"
-                                type="text"
-                                inputMode="numeric"
-                                value={cardNumber}
-                                onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
-                                placeholder="1234 5678 9012 3456"
-                                autoComplete="cc-number"
-                                required
-                                className="text-white"
-                            />
-                        </FormField>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <FormField id="expiry" label="Expiry" required>
-                                <Input
-                                    id="expiry"
-                                    type="text"
-                                    inputMode="numeric"
-                                    value={expiry}
-                                    onChange={(e) => setExpiry(formatExpiry(e.target.value))}
-                                    placeholder="MM/YY"
-                                    autoComplete="cc-exp"
-                                    required
-                                    className="text-white"
-                                />
-                            </FormField>
-
-                            <FormField id="cvc" label="CVC" required>
-                                <Input
-                                    id="cvc"
-                                    type="text"
-                                    inputMode="numeric"
-                                    value={cvc}
-                                    onChange={(e) => setCvc(e.target.value.replace(/\D/g, "").slice(0, 4))}
-                                    placeholder="123"
-                                    autoComplete="cc-csc"
-                                    required
-                                    className="text-white"
-                                />
-                            </FormField>
-                        </div>
-
-                        <Button
-                            type="submit"
-                            variant="brand"
-                            disabled={loading}
-                            className="mt-2 h-12 w-full rounded-xl text-base font-medium"
-                        >
-                            {loading ? (
-                                <LoaderCircle className="size-5 animate-spin" />
-                            ) : (
-                                <LockKeyhole data-icon="inline-start" aria-hidden="true" />
-                            )}
-                            Pay ${PRICE.toFixed(2)}
-                        </Button>
-
-                        <p className="flex items-center justify-center gap-1.5 text-xs text-[#a1a4aa]">
-                            <Sparkles className="size-3.5 text-[#8a83ff]" aria-hidden="true" />
-                            You&apos;ll be redirected to Stripe to complete your purchase securely.
-                        </p>
+                    <form action="/api/checkout_sessions" method="POST">
+                        <section>
+                            <Button
+                                type="submit"
+                                role="link"
+                                variant="brand"
+                                className="mt-2 h-12 w-full rounded-xl text-base font-medium"
+                            >
+                                Checkout
+                                Pay ${PRICE.toFixed(2)}
+                            </Button>
+                        </section>
                     </form>
                 </section>
             </div>
