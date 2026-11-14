@@ -17,6 +17,9 @@ import { createPost } from "@/lib/actions/createPost";
 import { CATEGORIES, FREQUENCIES, JOB_TYPES, initialForm } from "@/lib/constants/job";
 import type { JobForm } from "@/types";
 import { cn } from "cn";
+import { useSession } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
+import { toast } from "@/components/ui/toast";
 
 // Back-compat re-exports — canonical definitions live in @/types and @/lib/constants/job.
 export type { JobForm, JobStatus } from "@/types";
@@ -28,20 +31,27 @@ const sectionHeading = "flex items-center gap-2 text-lg font-semibold text-white
 function AddNewJobs() {
     const [form, setForm] = useState(initialForm);
     const [submitted, setSubmitted] = useState(false);
+    const { data: session } = useSession();
 
     const set = <K extends keyof JobForm>(field: K, value: JobForm[K]) => {
-        setForm((prev) => ({ ...prev, [field]: value }));
+        setForm((prev) => ({ ...prev, recureterId: session?.user.id ?? "", [field]: value }));
         setSubmitted(false);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("new job post", form);
         setSubmitted(true);
 
         const result = await createPost(form);
 
-        console.log("submit data", result)
+        if (result.insertedId) {
+            toast.add({
+                title: "success",
+                description: "Successfully added new job."
+            })
+            redirect("/dashboard/recruiter/jobs");
+
+        }
     };
 
     return (

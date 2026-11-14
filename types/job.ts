@@ -11,6 +11,7 @@ export type JobFormField = keyof JobForm;
 export type JobForm = {
     title: string;
     companyName: string;
+    recureterId: string;
     category: string;
     jobType: string;
     location: string;

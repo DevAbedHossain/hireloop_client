@@ -9,6 +9,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { formatCompensation, formatDeadline } from "@/lib/utils/job-format";
 import type { JobPost, JobStatus } from "@/types";
+import { getServer } from "@/lib/core/Server";
 
 // Back-compat re-export — the canonical definitions live in @/types.
 export type { JobPost, JobStatus } from "@/types";
@@ -27,7 +28,9 @@ const resolveStatus = (job: JobPost): JobStatus => {
 
 const ManageJobs = async () => {
 
-    const jobs: JobPost[] = await getJobs();
+    const user = await getServer();
+
+    const jobs: JobPost[] = await getJobs(`recureterId=${user?.id}`);
 
     return (
         <div className="flex flex-col gap-6 p-6">
