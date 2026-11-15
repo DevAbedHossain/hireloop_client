@@ -42,6 +42,7 @@ const JobDetailsAction = ({ job }: { job: JobPost }) => {
                     userEmail: user.email,
                     jobTitle: job.title,
                     jobCompany: job.companyName,
+                    status: "applied",
                 }
 
                 const result = await applicationJob(application);

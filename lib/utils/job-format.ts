@@ -1,7 +1,7 @@
 // Shared formatting helpers for job postings (used by the browse-jobs cards
 // and the manage-jobs table).
 
-import type { JobPost } from "@/types";
+import type { JobPost, JobStatus } from "@/types";
 
 // "per hour" -> "/ hr", "per year" -> "/ yr", "per month" -> "/ mo"
 export const frequencySuffix = (frequency: string) => {
@@ -26,6 +26,13 @@ export const formatDeadline = (deadline: string) =>
         day: "2-digit",
         year: "numeric",
     });
+
+/** API documents may omit `status` — fall back to the deadline:
+ *  not passed yet → Active, already passed → Expired. */
+export const resolveJobStatus = (job: JobPost): JobStatus => {
+    if (job.status && job.status in { Active: 1, Expired: 1 }) return job.status;
+    return new Date(job.deadline) > new Date() ? "Active" : "Expired";
+};
 
 /** Mongo ObjectId -> creation date (the first 8 hex chars hold the unix seconds). */
 export const objectIdToDate = (id: string) =>

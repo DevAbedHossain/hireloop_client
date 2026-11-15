@@ -25,6 +25,7 @@ export const FREQUENCIES = ["per hour", "per day", "per month", "per year"] as c
 export const initialForm: JobForm = {
     title: "",
     companyName: "",
+    recureterId: "", // set from the logged-in user on field change
     category: "",
     jobType: "Full-time",
     location: "",

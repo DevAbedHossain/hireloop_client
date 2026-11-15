@@ -49,6 +49,8 @@ export type Application = {
     jobCompany: string;
     userId?: string;
     userEmail?: string;
+    /** Applicant's account name — resolved by the API from the user record; may be null. */
+    applicantName?: string | null;
     /** Not tracked by the API yet — the UI defaults to "Applied". */
     status?: ApplicationStatus;
 };

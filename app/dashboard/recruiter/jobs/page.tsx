@@ -1,36 +1,39 @@
 import Link from "next/link";
-import { Eye, MapPin, PencilLine } from "lucide-react";
+import { Eye, MapPin, PencilLine, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "cn";
-import { getJobs } from "@/lib/api/jobs";
+import { getApplications, getJobs } from "@/lib/api/jobs";
 import { JobDeleteDialog } from "@/components/dashboard/JobDeleteDialog";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
-import { formatCompensation, formatDeadline } from "@/lib/utils/job-format";
-import type { JobPost, JobStatus } from "@/types";
+import { formatCompensation, formatDeadline, resolveJobStatus } from "@/lib/utils/job-format";
+import type { Application, JobPost, JobStatus } from "@/types";
 import { getServer } from "@/lib/core/Server";
 
 // Back-compat re-export — the canonical definitions live in @/types.
 export type { JobPost, JobStatus } from "@/types";
 
 const cellSmall = "text-sm text-[#a0a0ab]";
-const hideSm = "sm:hidden";
+const hideSm = "hidden sm:table-cell";
 const hideMd = "hidden md:table-cell";
 const tableHead = "h-12 px-4 text-xs font-medium tracking-wider text-[#a0a0ab] uppercase";
-
-// API documents may omit `status` — fall back to the deadline:
-// not passed yet → Active, already passed → Expired.
-const resolveStatus = (job: JobPost): JobStatus => {
-    if (job.status && job.status in { Active: 1, Expired: 1 }) return job.status;
-    return new Date(job.deadline) > new Date() ? "Active" : "Expired";
-};
 
 const ManageJobs = async () => {
 
     const user = await getServer();
 
-    const jobs: JobPost[] = await getJobs(`recureterId=${user?.id}`);
+    const [jobs, applications] = await Promise.all([
+        getJobs(`recureterId=${user?.id}`),
+        getApplications(),
+    ]);
+
+    // The job documents only carry a static `applicants` seed number — count
+    // the real applications per job for the table (one fetch, grouped here).
+    const applicationCountByJob = new Map<string, number>();
+    for (const app of applications as Application[]) {
+        applicationCountByJob.set(app.jobId, (applicationCountByJob.get(app.jobId) ?? 0) + 1);
+    }
 
     return (
         <div className="flex flex-col gap-6 p-6">
@@ -90,7 +93,7 @@ const ManageJobs = async () => {
                         </thead>
                         <tbody>
                             {jobs.map((job) => {
-                                const status = resolveStatus(job);
+                                const status = resolveJobStatus(job);
                                 return (
                                     <tr key={job._id} className="border-t border-white/8 transition-colors hover:bg-white/2">
                                         {/* Job Title & Dept */}
@@ -129,12 +132,15 @@ const ManageJobs = async () => {
                                             {formatCompensation(job)}
                                         </td>
 
-                                        {/* Applicants */}
+                                        {/* Applicants (real application count) */}
                                         <td className={cn("px-4 py-4", hideSm)}>
-                                            <span className="flex items-center gap-2 text-sm text-[#d4d4d8]">
-                                                {job.applicants ?? 0}
+                                            <Link
+                                                href={`/dashboard/recruiter/jobs/${job._id}/applications`}
+                                                className="flex items-center gap-2 text-sm text-[#d4d4d8] transition-colors hover:text-white"
+                                            >
+                                                {applicationCountByJob.get(job._id ?? "") ?? 0}
                                                 <span className="text-[#a0a0ab]">Candidates</span>
-                                            </span>
+                                            </Link>
                                         </td>
 
                                         {/* Status */}
@@ -163,6 +169,18 @@ const ManageJobs = async () => {
                                                     nativeButton={false}
                                                 >
                                                     <PencilLine />
+                                                </Button>
+
+                                                <Button
+                                                    className="h-8 rounded-lg border border-transparent bg-[#5c53fe]/20 px-3 text-sm font-medium text-[#c3c0ff] hover:bg-[#5c53fe]/30"
+                                                    aria-label={`View applications for ${job.title}`}
+                                                    title="View applications"
+                                                    render={
+                                                        <Link href={`/dashboard/recruiter/jobs/${job._id}/applications`} />
+                                                    }
+                                                    nativeButton={false}
+                                                >
+                                                    <Users />
                                                 </Button>
 
                                                 <Button

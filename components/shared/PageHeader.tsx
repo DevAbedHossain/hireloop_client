@@ -6,7 +6,8 @@ export type BreadcrumbItem = {
     href?: string
 }
 
-/** Page heading block: optional breadcrumb, title + description, and an action slot. */
+/** Page heading block: optional breadcrumb, title + description, and an action slot.
+ *  `title` accepts a node so status badges can render beside the heading text. */
 export function PageHeader({
     breadcrumb,
     title,
@@ -14,7 +15,7 @@ export function PageHeader({
     action,
 }: {
     breadcrumb?: BreadcrumbItem[]
-    title: string
+    title: React.ReactNode
     description?: string
     action?: React.ReactNode
 }) {
@@ -42,7 +43,7 @@ export function PageHeader({
 
             <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-semibold [font-family:var(--font-manrope)] text-white">
+                    <h1 className="flex flex-wrap items-center gap-3 text-2xl font-semibold [font-family:var(--font-manrope)] text-white">
                         {title}
                     </h1>
                     {description && (

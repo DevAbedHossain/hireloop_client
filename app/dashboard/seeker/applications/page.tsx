@@ -13,6 +13,7 @@ import {
 import { appliedJobs, getJobs } from "@/lib/api/jobs";
 import { cn } from "cn";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { ApplicationStatusBadge } from "@/components/shared/ApplicationStatusBadge";
 import {
     formatRelativeTime,
     objectIdToDate,
@@ -23,24 +24,14 @@ import { headers } from "next/headers";
 
 // Shared class strings (same pattern as the manage-jobs table).
 const cellSmall = "text-sm text-[#a0a0ab]";
-const hideSm = "sm:hidden";
+const hideSm = "hidden sm:table-cell";
 const hideMd = "hidden md:table-cell";
 const tableHead = "h-12 px-4 text-xs font-medium tracking-wider text-[#a0a0ab] uppercase";
 const statCard = "rounded-xl border border-white/8 bg-[#141418] p-5";
-const pill = "inline-flex h-7 items-center rounded-md border px-3 text-sm";
 const pageButton =
     "flex size-9 items-center justify-center rounded-lg border border-white/10 bg-[#141418] text-sm text-[#d4d4d8] transition-colors hover:text-white";
 const pageButtonActive =
     "flex size-9 items-center justify-center rounded-lg bg-white text-sm font-semibold text-[#0a0a0c]";
-
-// Pill styles per application status (design: gray / amber / blue / red / green).
-const statusPill: Record<ApplicationStatus, string> = {
-    Applied: "border-white/10 bg-white/5 text-[#a1a4aa]",
-    Review: "border-amber-500/30 bg-amber-500/10 text-amber-400",
-    Shortlisted: "border-blue-500/30 bg-blue-500/10 text-blue-300",
-    Rejected: "border-red-500/30 bg-red-500/10 text-red-400",
-    Offered: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400",
-};
 
 // Decorative row icons cycled per application (Figma shows a varied icon set).
 const rowIcons = [
@@ -205,7 +196,7 @@ const ApplicationsPage = async () => {
 
                                             {/* Status */}
                                             <td className="px-4 py-4">
-                                                <span className={cn(pill, statusPill[status])}>{status}</span>
+                                                <ApplicationStatusBadge status={status} />
                                             </td>
 
                                             {/* Action */}
