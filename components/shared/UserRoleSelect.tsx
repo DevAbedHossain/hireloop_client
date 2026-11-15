@@ -1,20 +1,21 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-
-import { updateUserRole } from "@/lib/api/users";
 import { cn } from "cn";
 import { roleStyles } from "@/components/shared/RoleBadge";
 import type { Role } from "@/types";
+import { updateUserRole } from "@/lib/actions/users";
 
 const ROLES: Role[] = ["seeker", "recruiter", "admin"];
 
 /**
  * Editable role control for the admin users table (toggle seeker/recruiter/admin).
- * Updates optimistically in the UI; persistence itself isn't wired yet — see
- * the `updateUserRole` TODO in lib/api/users.ts. Reverts on failure.
+ * Updates optimistically, persists via `PATCH /user/:id/role`, and refreshes the
+ * server-rendered table (role badges + stat cards). Reverts on failure.
  */
 export function UserRoleSelect({ userId, role }: { userId: string; role?: Role }) {
+    const router = useRouter();
     const [value, setValue] = useState<Role>(role ?? "seeker");
     const [pending, startTransition] = useTransition();
 
@@ -25,6 +26,7 @@ export function UserRoleSelect({ userId, role }: { userId: string; role?: Role }
         startTransition(async () => {
             try {
                 await updateUserRole(userId, next);
+                router.refresh(); // re-render role badges / stat cards with persisted data
             } catch {
                 setValue(previous); // revert on failure
             }

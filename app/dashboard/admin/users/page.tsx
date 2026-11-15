@@ -176,7 +176,7 @@ const UserListPage = async ({
                                             <StatusBadge status={user.status ?? "Active"} />
                                         </td>
 
-                                        {/* Actions — role toggle (persistence TODO, see updateUserRole) */}
+                                        {/* Actions — role toggle (persists via PATCH /user/:id/role) */}
                                         <td className="px-4 py-4 text-right">
                                             <UserRoleSelect userId={user.id ?? user._id ?? ""} role={user.role} />
                                         </td>
