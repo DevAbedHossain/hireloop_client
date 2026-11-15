@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Eye, MapPin, PencilLine, Users } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { cn } from "cn";
 import { getApplications, getJobs } from "@/lib/api/jobs";
@@ -8,11 +7,8 @@ import { JobDeleteDialog } from "@/components/dashboard/JobDeleteDialog";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { formatCompensation, formatDeadline, resolveJobStatus } from "@/lib/utils/job-format";
-import type { Application, JobPost, JobStatus } from "@/types";
+import type { Application } from "@/types";
 import { getServer } from "@/lib/core/Server";
-
-// Back-compat re-export — the canonical definitions live in @/types.
-export type { JobPost, JobStatus } from "@/types";
 
 const cellSmall = "text-sm text-[#a0a0ab]";
 const hideSm = "hidden sm:table-cell";

@@ -10,7 +10,8 @@ import {
     ServerCog,
 } from "lucide-react";
 
-import { appliedJobs, getJobs } from "@/lib/api/jobs";
+import { appliedJobs } from "@/lib/core/jobs";
+import { getJobs } from "@/lib/api/jobs";
 import { cn } from "cn";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { ApplicationStatusBadge } from "@/components/shared/ApplicationStatusBadge";

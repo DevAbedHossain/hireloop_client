@@ -1,7 +1,5 @@
-import { BriefcaseBusiness, Inbox, Mail } from "lucide-react";
+import { Inbox, Mail } from "lucide-react";
 import { notFound } from "next/navigation";
-
-import { getJobApplications, jobDetails } from "@/lib/api/jobs";
 import { cn } from "cn";
 import { ApplicationStatusBadge } from "@/components/shared/ApplicationStatusBadge";
 import { ApplicationStatusSelect } from "@/components/shared/ApplicationStatusSelect";
@@ -13,6 +11,8 @@ import {
     resolveJobStatus,
 } from "@/lib/utils/job-format";
 import type { Application, ApplicationStatus, JobPost } from "@/types";
+import { getJobApplications } from "@/lib/core/jobs";
+import { jobDetails } from "@/lib/api/jobs";
 
 // Shared class strings (same pattern as the manage-jobs / my-applications tables).
 const cellSmall = "text-sm text-[#a0a0ab]";
