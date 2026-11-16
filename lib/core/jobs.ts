@@ -15,7 +15,7 @@ export const appliedJobs = async (userId: string): Promise<Application[]> => {
 }
 
 export const getJobApplications = async (jobId: string): Promise<Application[]> => {
-
-    const res = await fetch(`${BASE_URL}/applications?jobId=${jobId}`);
+    const api = `${BASE_URL}/applications?jobId=${jobId}`;
+    const res = await authFetch(api);
     return res.json();
 }

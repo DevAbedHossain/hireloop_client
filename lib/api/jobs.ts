@@ -1,55 +1,59 @@
 import type { Application, ApplicationStatus, JobPost } from "@/types";
-import { getToken } from "../core/Server";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
-async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
-    if (!BASE_URL) {
-        throw new Error("NEXT_PUBLIC_API_BASE_URL is not set");
-    }
+export const getJobs = async (query = ""): Promise<JobPost[]> => {
+    const res = await fetch(`${BASE_URL}/jobs?${query}`);
+    return res.json();
+}
 
-    const token = await getToken();
+export const jobDetails = async (id: string) => {
+    const res = await fetch(`${BASE_URL}/job/${id}`);
+    return res.json();
+}
 
-    const headers = new Headers(init.headers);
-    if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-    }
+export const jobDelete = async (id: string) => {
+    const res = await fetch(`${BASE_URL}/job/${id}`, {
+        method: "DELETE",
+    })
+    return res.json();
+}
 
-    const res = await fetch(`${BASE_URL}${path}`, {
-        cache: "no-store",
-        ...init,
-        headers,
-    });
+export const appliedJobs = async (userId: string) => {
+    const res = await fetch(`${BASE_URL}/applications?userId=${userId}`);
+    return res.json();
+}
+
+export const appliedJobsCount = async (userId = "") => {
+    const res = await fetch(`${BASE_URL}/applications/count?userId=${userId}`);
+    return res.json();
+}
+
+/** All applications submitted for one job (recruiter review view). */
+export const getJobApplications = async (jobId: string): Promise<Application[]> => {
+    const res = await fetch(`${BASE_URL}/applications?jobId=${jobId}`);
+    return res.json();
+}
+
+/** Every application in the system — recruiter tables aggregate real counts from this. */
+export const getApplications = async (): Promise<Application[]> => {
+    const res = await fetch(`${BASE_URL}/applications`);
+    return res.json();
+}
+
+/** Recruiter updates the review status of one application. */
+export const updateApplicationStatus = async (applicationId: string, status: ApplicationStatus) => {
+    const res = await fetch(`${BASE_URL}/application/${applicationId}/status`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ status }),
+    })
 
     if (!res.ok) {
-        throw new Error(`Request to ${path} failed (${res.status})`);
+        throw new Error(`Status update failed (${res.status})`)
     }
 
     return res.json();
 }
-
-export const getJobs = async (query = ""): Promise<JobPost[]> => {
-    const data = await request<JobPost[]>(`/jobs?${query}`);
-    return Array.isArray(data) ? data : [];
-};
-
-export const jobDetails = (id: string) => request(`/job/${id}`);
-
-export const jobDelete = (id: string) =>
-    request(`/job/${id}`, { method: "DELETE" });
-
-export const appliedJobsCount = (userId = "") =>
-    request(`/applications/count?userId=${userId}`);
-
-export const getApplications = async (): Promise<Application[]> => {
-    const data = await request<Application[]>("/applications");
-    return Array.isArray(data) ? data : [];
-};
-
-
-export const updateApplicationStatus = (applicationId: string, status: ApplicationStatus) =>
-    request(`/application/${applicationId}/status`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
-    });

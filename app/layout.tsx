@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toast"
 
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
+const geist = Geist({subsets:['latin'],variable:'--font-sans'})
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
