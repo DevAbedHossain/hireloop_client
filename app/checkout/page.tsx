@@ -14,7 +14,11 @@ import { Button } from "@/components/ui/button";
 const PRICE = 29.0;
 
 
-export default async function CheckoutPage({ searchParams }: { searchParams: { canceled?: string } }) {
+export default async function CheckoutPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ canceled?: string }>;
+}) {
 
     const { canceled } = await searchParams;
 

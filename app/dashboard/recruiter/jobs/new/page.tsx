@@ -21,9 +21,8 @@ import { useSession } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 import { toast } from "@/components/ui/toast";
 
-// Back-compat re-exports — canonical definitions live in @/types and @/lib/constants/job.
-export type { JobForm, JobStatus } from "@/types";
-export { initialForm } from "@/lib/constants/job";
+// Canonical definitions live in @/types and @/lib/constants/job —
+// page files must not re-export values (Next.js enforces this).
 
 const card = "rounded-lg border border-white/8 bg-[#141418] p-6";
 const sectionHeading = "flex items-center gap-2 text-lg font-semibold text-white";
