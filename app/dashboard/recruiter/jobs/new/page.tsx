@@ -234,7 +234,7 @@ function AddNewJobs() {
             )}
 
             <div className="flex gap-3">
-                <Button type="submit" variant="brand" className="h-11 rounded-xl px-6 text-base font-medium">
+                <Button type="submit" variant="default" className="h-11 rounded-xl px-6 text-base font-medium">
                     Post Job
                 </Button>
                 <Button

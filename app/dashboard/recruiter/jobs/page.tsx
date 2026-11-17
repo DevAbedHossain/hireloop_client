@@ -26,9 +26,23 @@ const ManageJobs = async () => {
 
     // The job documents only carry a static `applicants` seed number — count
     // the real applications per job for the table (one fetch, grouped here).
+    // const applicationCountByJob = new Map<string, number>();
+    // for (const app of applications as Application[]) {
+    //     applicationCountByJob.set(app.jobId, (applicationCountByJob.get(app.jobId) ?? 0) + 1);
+    // }
+
+    console.log("Applications:", applications);
+    console.log("Is Array:", Array.isArray(applications));
+
     const applicationCountByJob = new Map<string, number>();
-    for (const app of applications as Application[]) {
-        applicationCountByJob.set(app.jobId, (applicationCountByJob.get(app.jobId) ?? 0) + 1);
+
+    if (Array.isArray(applications)) {
+        for (const app of applications as Application[]) {
+            applicationCountByJob.set(
+                app.jobId,
+                (applicationCountByJob.get(app.jobId) ?? 0) + 1
+            );
+        }
     }
 
     return (
@@ -43,7 +57,7 @@ const ManageJobs = async () => {
                 description="Review live listings, monitor applicants, and update job details"
                 action={
                     <Button
-                        variant="brand"
+                        variant="default"
                         render={
                             <Link href="/dashboard/recruiter/jobs/new" />
                         }

@@ -8,6 +8,7 @@ import {
     Building2,
     CreditCard,
     FileText,
+    Home,
     LayoutDashboard,
     PlusCircle,
     Settings,
@@ -37,6 +38,7 @@ export type MenuItem = {
 
 const menuItemsByRole: Record<Role, MenuItem[]> = {
     seeker: [
+        { id: "home", name: "Home", url: "/", icon: Home },
         { id: "dashboard", name: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
         { id: "jobs", name: "Jobs", url: "/dashboard/seeker/jobs", icon: Briefcase },
         { id: "saved-jobs", name: "Saved Jobs", url: "/dashboard/seeker/saved-jobs", icon: Bookmark },
@@ -45,6 +47,7 @@ const menuItemsByRole: Record<Role, MenuItem[]> = {
         { id: "settings", name: "Settings", url: "/dashboard/seeker/settings", icon: Settings },
     ],
     recruiter: [
+        { id: "home", name: "Home", url: "/", icon: Home },
         { id: "dashboard", name: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
         { id: "my-company", name: "My Company", url: "/dashboard/recruiter/my-company", icon: Building2 },
         { id: "manage-jobs", name: "Manage Jobs", url: "/dashboard/recruiter/jobs", icon: Briefcase },
@@ -53,6 +56,7 @@ const menuItemsByRole: Record<Role, MenuItem[]> = {
         { id: "settings", name: "Settings", url: "/dashboard/settings", icon: Settings },
     ],
     admin: [
+        { id: "home", name: "Home", url: "/", icon: Home },
         { id: "dashboard", name: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
         { id: "users", name: "Users", url: "/dashboard/admin/users", icon: Users },
         { id: "companies", name: "Companies", url: "/dashboard/admin/companies", icon: Building2 },
@@ -69,7 +73,14 @@ export function DashboardSidebar() {
 
     return (
         <Sidebar>
-            <SidebarHeader />
+            <SidebarHeader>
+                <div className="mx-2 flex flex-col gap-0.5 rounded-lg bg-[#101010] p-3">
+                    <span className="truncate text-sm font-semibold text-white">
+                        {session?.user?.name || "Guest User"}
+                    </span>
+                    <span className="text-xs capitalize text-[#a1a4aa]">{role}</span>
+                </div>
+            </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup />
                 <SidebarMenu>

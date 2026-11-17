@@ -1,27 +1,19 @@
+"use server";
+
 import type { AppliedJob, JobForm } from "@/types";
+import { protectedMutation } from "../core/Server";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const createPost = async (data: JobForm) => {
-    const res = await fetch(`${BASE_URL}/jobs`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data),
-    })
-
+    const api = `${BASE_URL}/jobs`;
+    const res = await protectedMutation(api, "POST", data)
     return res.json();
 }
 
 export const applicationJob = async (job: AppliedJob) => {
-    const res = await fetch(`${BASE_URL}/application`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(job),
-    })
+    const api = `${BASE_URL}/application`;
+    const res = await protectedMutation(api, "POST", job);
     return res.json();
 }
 

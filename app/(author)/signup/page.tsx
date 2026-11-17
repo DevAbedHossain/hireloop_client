@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { LoaderCircle, ShieldCheck, Briefcase, UserSearch } from "lucide-react"
+import { LoaderCircle, Briefcase, UserSearch } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,7 +19,6 @@ import type { AuthError, Role } from "@/types"
 const ROLES = [
     { value: "seeker", label: "Job Seeker", icon: UserSearch },
     { value: "recruiter", label: "Recruiter", icon: Briefcase },
-    { value: "admin", label: "Admin", icon: ShieldCheck },
 ] satisfies { value: Role; label: string; icon: typeof UserSearch }[]
 
 export default function SignUpPage() {
@@ -27,9 +26,16 @@ export default function SignUpPage() {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [image, setImage] = useState<File | null>(null)
     const [role, setRole] = useState<Role>("seeker")
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<AuthError>(null)
+
+    // The upload itself is handled separately — this only picks the file.
+    function onImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0]
+        setImage(file ?? null)
+    }
 
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault()
@@ -124,12 +130,22 @@ export default function SignUpPage() {
                     />
                 </FormField>
 
+                <FormField id="image" label="Profile image" badge="Optional">
+                    <Input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        onChange={onImageChange}
+                        className="text-white file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-[#5c53fe] file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:border-[#5c53fe]"
+                    />
+                </FormField>
+
                 <SegmentedRadioGroup
                     label="I am a"
                     value={role}
                     onValueChange={setRole}
                     options={ROLES}
-                    className="grid-cols-3"
+                    className="grid-cols-2"
                 />
 
                 {error && (

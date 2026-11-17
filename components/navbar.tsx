@@ -9,10 +9,13 @@ import { Button } from "@/components/ui/button"
 import { signOut, useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
+const AVATAR_PLACEHOLDER = "/avatar-placeholder.svg";
+
 export function Navbar() {
   const { data: session } = useSession();
   const user = session?.user;
   const router = useRouter();
+  const avatarSrc = user?.image || AVATAR_PLACEHOLDER;
 
   const navLinks = [
     { label: "Browse Jobs", href: "/browse-jobs" },
@@ -77,7 +80,16 @@ export function Navbar() {
                 <div aria-hidden="true" className="mx-2.5 my-1.5 h-px bg-[#a8a8a8]/40" />
                 {
                   user ? <>
-                    <h2 className="text-white">{user.name}</h2>
+                    <div className="mt-1 flex items-center gap-2">
+                      {/* Plain img: user image URLs come from an external host chosen at upload time */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={avatarSrc}
+                        alt={user.name || "User avatar"}
+                        className="size-8 rounded-full border border-white/10 object-cover"
+                      />
+                      <h2 className="text-white">{user.name}</h2>
+                    </div>
                     <Button onClick={handleSignOut}
                       variant="ghost"
                       className="mt-1 h-9 rounded-md bg-[#ff343e] text-sm text-[#ededeb] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#f0184e] hover:text-white"
@@ -117,6 +129,7 @@ function DesktopNav({ navLinks }: { navLinks: { label: string; href: string }[] 
   const { data: session } = useSession();
   const user = session?.user;
   const router = useRouter()
+  const avatarSrc = user?.image || AVATAR_PLACEHOLDER;
 
   const handleSignOut = () => {
     signOut();
@@ -143,7 +156,16 @@ function DesktopNav({ navLinks }: { navLinks: { label: string; href: string }[] 
       <div className="flex items-center gap-4">
         {
           user ? <>
-            <h2 className="text-white">{user.name}</h2>
+            <div className="flex items-center gap-2">
+              {/* Plain img: user image URLs come from an external host chosen at upload time */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={avatarSrc}
+                alt={user.name || "User avatar"}
+                className="size-9 rounded-full border border-white/10 object-cover"
+              />
+              <h2 className="text-white">{user.name}</h2>
+            </div>
             <Button onClick={handleSignOut}
               variant="ghost"
               className="mt-1 h-9 rounded-md bg-[#ff343e] text-sm text-[#ededeb] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#f0184e] hover:text-white"

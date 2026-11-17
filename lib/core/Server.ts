@@ -1,3 +1,6 @@
+"use server";
+
+
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "../auth";
@@ -40,5 +43,26 @@ export const authFetch = async (api: string) => {
             authorization: `Bearer ${token}`
         }
     })
+    if (res.status === 401 || res.status === 403) {
+        redirect("/unauthorized")
+    }
+    return res;
+}
+
+export const protectedMutation = async (api: string, method: string, data: unknown) => {
+    const token = await getToken();
+    const res = await fetch(api, {
+        method: method,
+        headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearar ${token}`
+        },
+        body: data ? JSON.stringify(data) : null,
+    })
+
+    if (res.status === 401 || res.status === 403) {
+        redirect("/unauthorized")
+    }
+
     return res;
 }
