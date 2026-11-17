@@ -26,15 +26,32 @@ export default function SignUpPage() {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [image, setImage] = useState<File | null>(null)
+    const [image, setImage] = useState<string | null>(null)
     const [role, setRole] = useState<Role>("seeker")
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<AuthError>(null)
 
     // The upload itself is handled separately — this only picks the file.
-    function onImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    async function onImageChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0]
-        setImage(file ?? null)
+
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const imgbbAPI = `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`;
+
+        const res = await fetch(imgbbAPI, {
+            method: "POST",
+            body: formData,
+        })
+
+        const result = await res.json();
+        const imageURL = result.data.url;
+        console.log("image", result);
+
+        setImage(imageURL)
     }
 
     async function onSubmit(e: React.FormEvent) {
@@ -46,6 +63,7 @@ export default function SignUpPage() {
             email,
             password,
             role,
+            image: image || undefined,
             callbackURL: "/",
         })
         setLoading(false)
@@ -156,7 +174,7 @@ export default function SignUpPage() {
 
                 <Button
                     type="submit"
-                    variant="brand"
+                    variant="default"
                     disabled={loading}
                     className="h-12 w-full rounded-xl text-base font-medium"
                 >
